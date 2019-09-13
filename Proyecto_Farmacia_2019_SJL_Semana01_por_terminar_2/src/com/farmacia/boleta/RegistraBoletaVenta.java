@@ -22,7 +22,7 @@ public class RegistraBoletaVenta {
 		bol.setClienteBoleta(cli);
 
 		Empleado emp = new Empleado();
-		emp.setCodEmpleado(1);
+		emp.setCodEmpleado(2);
 
 		bol.setEmpleadoBoleta(emp);
 		bol.setFechaEmision(new Date());
@@ -35,9 +35,9 @@ public class RegistraBoletaVenta {
 		DetalleBoletaPK detabolPK = new DetalleBoletaPK();
 
 		// Enviando los datos
-		detabol.setCantidad(3); // Cantidad del medicamento
-		detabol.setPrecio(11.11); // Precio del medicamento
-		detabolPK.setCodMedicamento(1); // Medicamento
+		detabol.setCantidad(10); // Cantidad del medicamento
+		detabol.setPrecio(13.0); // Precio del medicamento
+		detabolPK.setCodMedicamento(4); // Medicamento
 
 		// Enviando los datos del detalle
 		detabol.setPk(detabolPK);

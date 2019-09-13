@@ -32,7 +32,7 @@ public class ModeloBoleta {
 				detaPK.setCodMedicamento(db.getPk().getCodMedicamento());
 				// Enviar el número de boleta y código de medicamento al DetalleBoleta
 				db.setPk(detaPK);
-				em.persist(detaPK);
+				em.persist(db);
 			}
 			// Fin del For para grabar el detalle
 
