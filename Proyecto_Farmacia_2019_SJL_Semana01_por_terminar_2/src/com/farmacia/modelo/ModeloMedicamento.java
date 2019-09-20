@@ -137,4 +137,48 @@ public class ModeloMedicamento {
 		return listado;
 	}
 
+	// Caso 03 - Listado por medicamento de laboratorio
+
+	public List<Medicamento> ListadoMedicamentoxLaboratorio(int codigo) {
+
+		EntityManager em = fabrica.createEntityManager();
+		List<Medicamento> listado = null;
+		TypedQuery<Medicamento> result = null;
+
+		try {
+			String hql = "select m from Medicamento m where m.laboratorio.codLaboratorio = :param";
+			result = em.createQuery(hql, Medicamento.class);
+			result.setParameter("param", codigo);
+
+			listado = result.getResultList();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			em.close();
+			fabrica.close();
+		}
+		return listado;
+	}
+
+	// Caso 04 - Listar medicamento mas caro
+
+	public Medicamento ListaMedicamentoMasCaro() {
+		EntityManager em = fabrica.createEntityManager();
+		Medicamento listado = null;
+		TypedQuery<Medicamento> result = null;
+
+		try {
+			String hql = "select m from Medicamento m where m.preMedicamento="
+					+ "(select max(x.preMedicamento)from Medicamento x)";
+			result = em.createQuery(hql, Medicamento.class);
+			listado = result.getResultList().get(0);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			em.close();
+			fabrica.close();
+		}
+		return listado;
+	}
+
 }
