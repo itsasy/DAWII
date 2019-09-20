@@ -1,0 +1,136 @@
+CREATE DATABASE  IF NOT EXISTS `farmacia_2019_FINAL`;
+USE `farmacia_2019_FINAL`;
+
+
+DROP TABLE IF EXISTS `tb_distrito`;
+
+CREATE TABLE `tb_distrito` (
+  `cod_dis` int(11) NOT NULL AUTO_INCREMENT,
+  `nom_dis` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`cod_dis`)
+) ;
+
+INSERT INTO `tb_distrito` VALUES (1,'Comas'),(2,'Miraflores');
+
+
+DROP TABLE IF EXISTS `tb_cliente`;
+
+CREATE TABLE `tb_cliente` (
+  `cod_cli` int(11) NOT NULL AUTO_INCREMENT,
+  `nom_cli` varchar(30) DEFAULT NULL,
+  `ape_cli` varchar(30) DEFAULT NULL,
+  `sex_cli` varchar(15) DEFAULT NULL,
+  `fec_reg_cli` date DEFAULT NULL,
+  `dir_cli` varchar(30) DEFAULT NULL,
+  `cod_dis_cli` int(11) DEFAULT NULL,
+  PRIMARY KEY (`cod_cli`),
+  KEY `fk_tb_cliente_tb_distrito1` (`cod_dis_cli`),
+  CONSTRAINT `fk_tb_cliente_tb_distrito1` FOREIGN KEY (`cod_dis_cli`) REFERENCES `tb_distrito` (`cod_dis`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ;
+
+
+
+INSERT INTO `tb_cliente` VALUES (1,'Gloria','Mora','Femenino','2017-01-09','a1',1),(2,'Silvia','Lescano','Femenino','2017-01-08','b1',1);
+
+
+DROP TABLE IF EXISTS `tb_empleado`;
+
+CREATE TABLE `tb_empleado` (
+  `cod_emp` int(11) NOT NULL AUTO_INCREMENT,
+  `nom_emp` varchar(30) DEFAULT NULL,
+  `ape_emp` varchar(30) DEFAULT NULL,
+  `sex_emp` varchar(15) DEFAULT NULL,
+  `fec_reg_emp` date DEFAULT NULL,
+  `fec_nac_emp` date DEFAULT NULL,
+  `dir_emp` varchar(30) DEFAULT NULL,
+  `cod_dis_emp` int(11) DEFAULT NULL,
+  PRIMARY KEY (`cod_emp`),
+  KEY `fk_tb_empleado_tb_distrito1` (`cod_dis_emp`),
+  CONSTRAINT `fk_tb_empleado_tb_distrito1` FOREIGN KEY (`cod_dis_emp`) REFERENCES `tb_distrito` (`cod_dis`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ;
+
+
+INSERT INTO `tb_empleado` VALUES (1,'Ana','Soto','Femenino','2016-05-07','1980-08-16','a',1),(2,'Maria','Ayala','Femenino','2016-12-04','1985-04-08','b',1),(3,'Alicia','Castro','Femenino','2016-12-12','1984-07-06','c',1);
+
+
+DROP TABLE IF EXISTS `tb_laboratorio`;
+
+CREATE TABLE `tb_laboratorio` (
+  `cod_lab` int(11) NOT NULL AUTO_INCREMENT,
+  `des_lab` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`cod_lab`)
+) ;
+
+
+INSERT INTO `tb_laboratorio` VALUES (1,'ABABOR PHARMACEUTICALS, S.L.'),(2,'ABALON PHARMA, S.L.'),(3,'ABAMED PHARMA'),(4,'ABBOTT LABORATORIES, S.A.'),(5,'ABBVIE FARMACEUTICA, S.L.U.'),(6,'ABBVIE SPAIN, S.L.U.'),(7,'ABELLO LINDE'),(8,'ACCORD HEALTHCARE S.L.U.'),(13,'x1111');
+
+
+DROP TABLE IF EXISTS `tb_medicamento`;
+
+CREATE TABLE `tb_medicamento` (
+  `cod_med` int(11) NOT NULL AUTO_INCREMENT,
+  `nom_med` varchar(45) DEFAULT NULL,
+  `cod_lab` int(11) NOT NULL,
+  `stock_med` int(11) DEFAULT NULL,
+  `pre_med` double DEFAULT NULL,
+  `fec_ven_med` date DEFAULT NULL,
+  PRIMARY KEY (`cod_med`),
+  KEY `fk_tb_medicamento_tb_Laboratorio1` (`cod_lab`),
+  CONSTRAINT `fk_tb_medicamento_tb_Laboratorio1` FOREIGN KEY (`cod_lab`) REFERENCES `tb_laboratorio` (`cod_lab`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ;
+
+
+INSERT INTO `tb_medicamento` VALUES (1,'Aspirina',1,100,11.11,'2017-03-29'),(2,'Atenolol',1,54,152.65,'2018-03-25'),(3,'Atorvastatina',2,68,254.65,'2018-03-25'),(4,'Atovacuona',3,47,248.85,'2018-03-25'),(5,'Salbutamol ',2,98,12.69,'2018-03-25'),(6,'Amlexanox',2,75,45.66,'2018-03-25'),(7,'yuy',1,44,33.66,'2017-04-11'),(8,'fsdfsd',3,33,33,'2018-03-21'),(9,'aaaaa',6,10,1.2,'2018-03-06'),(10,'bbb',7,98,2.65,'2018-03-13'),(11,'cccc',4,25,98.65,'2018-03-30'),(12,'DDdd',3,90,5,'2018-03-21'),(13,'eeeee',5,258,9865.68,'2018-03-20'),(14,'ffffff',4,98,95.39,'2018-03-27'),(15,'ggg',6,9,5.25,'2018-03-14'),(16,'hhhh',5,9,98.66,'2018-03-21');
+
+
+DROP TABLE IF EXISTS `tb_boleta`;
+
+CREATE TABLE `tb_boleta` (
+  `num_bol` int(11) NOT NULL AUTO_INCREMENT,
+  `cod_cli` int(11) DEFAULT NULL,
+  `cod_emp` int(11) DEFAULT NULL,
+  `fec_emi_bol` date DEFAULT NULL,
+  `monto_bol` decimal(10,0) DEFAULT NULL,
+  PRIMARY KEY (`num_bol`),
+  KEY `fk_tb_boleta_tb_cliente` (`cod_cli`),
+  KEY `fk_tb_boleta_tb_empleado1` (`cod_emp`),
+  CONSTRAINT `fk_tb_boleta_tb_cliente` FOREIGN KEY (`cod_cli`) REFERENCES `tb_cliente` (`cod_cli`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_tb_boleta_tb_empleado1` FOREIGN KEY (`cod_emp`) REFERENCES `tb_empleado` (`cod_emp`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ;
+
+
+INSERT INTO `tb_boleta` VALUES (1,1,2,'2017-03-18',0),(2,1,2,'2017-03-18',0),(3,1,2,'2017-03-18',0),(4,1,2,'2017-03-18',0),(5,2,1,'2018-03-20',250);
+
+
+
+DROP TABLE IF EXISTS `tb_detalle_has_boleta`;
+
+CREATE TABLE `tb_detalle_has_boleta` (
+  `num_bol` int(11) NOT NULL,
+  `cod_med` int(11) NOT NULL,
+  `can` int(11) DEFAULT NULL,
+  `pre` double DEFAULT NULL,
+  PRIMARY KEY (`cod_med`,`num_bol`),
+  KEY `fk_tb_medicamento_has_boleta_tb_boleta1` (`num_bol`),
+  CONSTRAINT `fk_tb_detalle_has_boleta_tb_boleta1` FOREIGN KEY (`num_bol`) REFERENCES `tb_boleta` (`num_bol`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_tb_detalle_has_boleta_tb_medicamento1` FOREIGN KEY (`cod_med`) REFERENCES `tb_medicamento` (`cod_med`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ;
+
+INSERT INTO `tb_detalle_has_boleta` VALUES (1,1,5,12.5),(2,1,5,12.5),(3,1,5,12.5),(4,1,5,12.5),(5,1,5,20),(1,2,5,12.5),(2,2,5,12.5),(3,2,5,12.5),(4,2,7,0),(2,3,5,12.5),(4,3,5,0),(5,3,7,30);
+
+
+SELECT * FROM TB_DISTRITO;
+SELECT * FROM TB_CLIENTE;
+SELECT * FROM TB_EMPLEADO;
+SELECT * FROM TB_LABORATORIO;
+SELECT * FROM TB_MEDICAMENTO;
+SELECT * FROM TB_BOLETA;
+SELECT * FROM TB_DETALLE_HAS_BOLETA;
+
+
+
+select * from tb_medicamento;
+
+select * from tb_medicamento where cod_lab = 1;
+
+select  * from tb_laboratorio;
